@@ -1,16 +1,1 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
-body {
-  @apply font-sans bg-gray-900 text-gray-100;
-}
-
-input, select {
-  @apply focus:outline-none;
-}
-
-button {
-  @apply transition duration-200;
-}
+@import "tailwindcss";
