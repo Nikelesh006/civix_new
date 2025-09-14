@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 
-const petitionSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: String,
-  category: String,
-  city: String,
-  status: { type: String, default: "active" }, // "active", "successful", etc.
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  createdAt: { type: Date, default: Date.now }
-  // ...add other fields as needed
-});
+const petitionSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    category: { type: String },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    status: { type: String, default: "Active" }, // Active / Successful / Closed
+  },
+  { timestamps: true }
+);
 
-export default mongoose.model("Petition", petitionSchema);
+const Petition = mongoose.model("Petition", petitionSchema);
+export default Petition;
