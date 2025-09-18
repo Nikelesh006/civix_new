@@ -1,8 +1,12 @@
-import mongoose from "mongoose";
+// civix-backend/config/db.js
+const mongoose = require("mongoose");
 
-const connectDB = async () => {
+const connectDB = async (mongoUri) => {
   try {
-    await mongoose.connect("mongodb+srv://nikelesh2006:EaQO1h0INTkvqYI2@cluster0.lovo3n1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+    await mongoose.connect(mongoUri || process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("MongoDB connected successfully");
   } catch (error) {
     console.error("MongoDB connection failed:", error.message);
@@ -10,4 +14,4 @@ const connectDB = async () => {
   }
 };
 
-export default connectDB;
+module.exports = connectDB;

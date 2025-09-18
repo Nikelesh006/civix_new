@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Backend for Civix login/signup",
   "main": "src/app.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"

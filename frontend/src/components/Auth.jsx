@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Login from './Login';
 import Signup from './Signup';
+import { useNavigate } from 'react-router-dom';
+import { loginUser, registerUser } from '../api';
 
 const Auth = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignUpClick = () => {
     setIsSignUpMode(true);
@@ -13,14 +16,35 @@ const Auth = () => {
     setIsSignUpMode(false);
   };
 
-  const handleLoginSubmit = (formData) => {
-    console.log('Login submitted:', formData);
-    // Add your login logic here
+  const handleLoginSubmit = async (formData) => {
+    try {
+      const res = await loginUser({
+        email: formData.email,
+        password: formData.password,
+      });
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      alert("Login failed. Please check credentials.");
+      console.error(err);
+    }
   };
 
-  const handleSignupSubmit = (formData) => {
-    console.log('Signup submitted:', formData);
-    // Add your signup logic here
+  const handleSignupSubmit = async (formData) => {
+    try {
+      await registerUser({
+        fullName: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+      });
+      alert("Signup successful! Please login.");
+      setIsSignUpMode(false); // switch to login page
+    } catch (err) {
+      alert("Signup failed. Try again.");
+      console.error(err);
+    }
   };
 
   return (
@@ -32,7 +56,6 @@ const Auth = () => {
         minHeight: '100vh'
       }}
     >
-      {/* Font Awesome CDN */}
       <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -43,7 +66,7 @@ const Auth = () => {
       />
       
       <div className="bg-white rounded-3xl shadow-[0_25px_50px_rgba(0,0,0,0.25)] overflow-hidden w-full max-w-4xl min-h-[550px] flex relative backdrop-blur-sm">
-        {/* Left Panel - Brand Section */}
+        {/* Left Panel */}
         <div 
           className="flex-1 bg-slate-700 flex flex-col items-center justify-center text-center text-white px-10 py-15 relative md:block hidden"
           style={{
@@ -56,13 +79,12 @@ const Auth = () => {
             </div>
             <span className="text-3xl font-bold text-white tracking-widest">CIVIX</span>
           </div>
-          
           <p className="text-sm leading-relaxed mb-10 opacity-80 max-w-xs">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
         </div>
 
-        {/* Right Panel - Form Section */}
+        {/* Right Panel */}
         <div className="flex-1 px-12 py-15 flex flex-col justify-center relative bg-white md:px-12 px-6">
           <div className={`transition-all duration-600 ${isSignUpMode ? 'opacity-0 translate-x-full pointer-events-none' : 'opacity-100 translate-x-0 pointer-events-auto'}`}>
             <Login onSubmit={handleLoginSubmit} onSwitchToSignup={handleSignUpClick} />
